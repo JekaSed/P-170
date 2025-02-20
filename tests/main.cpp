@@ -9,7 +9,7 @@
 #include <chrono>
 #include <qcompare.h>
 
-class TestPLayer final : public QObject
+class TestArtekWidget final : public QObject
 {
     Q_OBJECT
 
@@ -43,5 +43,5 @@ private slots:
     };
 };
 
-QTEST_MAIN(TestPLayer)
+QTEST_MAIN(TestArtekWidget)
 #include "main.moc"
