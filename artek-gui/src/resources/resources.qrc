@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/resources">
+        <file>icons/delete.png</file>
+        <file>icons/send.png</file>
+        <file>icons/undo.png</file>
+        <file>fonts/Lato-Regular.ttf</file>
+        <file>icons/redo.png</file>
+        <file>icons/save.png</file>
+        <file>icons/save-as.png</file>
+        <file>icons/blank.png</file>
+        <file>icons/open.png</file>
+        <file>fonts/Fragua-Pro-Regular.otf</file>
+        <file>icons/pencil.png</file>
+    </qresource>
+</RCC>

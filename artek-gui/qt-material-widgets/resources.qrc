@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/materials">
+        <file>icons/toggle/ic_check_box_24px.png</file>
+        <file>icons/toggle/ic_check_box_outline_blank_24px.png</file>
+    </qresource>
+</RCC>
