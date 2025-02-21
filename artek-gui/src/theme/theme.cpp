@@ -480,4 +480,10 @@ QString progressBarCSS()
       .arg(disabledColor().name());
 }
 
+const QIcon& muteIcon()
+{
+    static const QIcon ic(":/resources/icons/mute.png");
+    return ic;
+}
+
 }   // namespace theme

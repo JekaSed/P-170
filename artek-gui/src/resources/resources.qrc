@@ -11,5 +11,6 @@
         <file>icons/open.png</file>
         <file>fonts/Fragua-Pro-Regular.otf</file>
         <file>icons/pencil.png</file>
+        <file>icons/mute.png</file>
     </qresource>
 </RCC>

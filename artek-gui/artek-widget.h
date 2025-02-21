@@ -2,6 +2,7 @@
 #define ARTEKWIDGET_H
 
 #include "src/frequency/frequency-widget.h"
+#include "src/volume-widget.h"
 #include <QWidget>
 
 class ArtekWidget : public QWidget
@@ -12,6 +13,7 @@ public:
 
 private:
     FrequencyWidget* m_freqWidget;
+    VolumeWidget* m_volWidget;
 
 signals:
 };

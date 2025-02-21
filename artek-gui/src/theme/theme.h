@@ -69,6 +69,7 @@ const QIcon& uploadIcon();
 
 const QIcon& buttonUncheckedIcon();
 const QIcon& buttonCheckedIcon();
+const QIcon& muteIcon();
 
 const QFont& infoFont();
 const QFont& baseFont();
