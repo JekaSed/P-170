@@ -1,6 +1,22 @@
+#include <QList>
+
 #pragma once
 
-#include "src/workmode-data.h"
+enum class EmissionType
+{
+    F1B,
+    F7B,
+    G1B,
+    J3E,
+    B8E,
+    R3E,
+    H3E,
+    F3EJ,
+    F3EA,
+    A1A,
+    A3E,
+    A2A
+};
 
 struct WorkModeDefault
 {

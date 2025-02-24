@@ -2,10 +2,10 @@
 
 WorkModeDefault getDefault(EmissionType emissionClass)
 {
-    WorkModeData result;
+    WorkModeDefault result;
     switch (emissionClass) {
     case EmissionType::F1B:
-        return {emissionClass, {6, 75, 100, 125, 200, 250, 500, 1000}, {4, 50, 100, 150, 300, 500}};
+        return {emissionClass, {6, 75, 100, 125, 200, 250, 500, 1000}, {50, 100, 150, 300, 500}};
     case EmissionType::F7B:
 
         return {emissionClass, {125, 200, 250, 400, 500, 1000}, {50, 100, 150, 200, 300, 500}};
@@ -24,7 +24,7 @@ WorkModeDefault getDefault(EmissionType emissionClass)
     case EmissionType::F3EA:
         return {emissionClass, {}, {}};
     case EmissionType::A1A:
-        return {emissionClass, {}, {}};
+        return {emissionClass, {160, 300, 600, 1200, 2200}, {}};
     case EmissionType::A3E:
         return {emissionClass, {}, {}};
     case EmissionType::A2A:

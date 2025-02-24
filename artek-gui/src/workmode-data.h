@@ -1,37 +1,42 @@
 #ifndef WORKMODEDATA_H
 #define WORKMODEDATA_H
 
+#include "src/workmode-default.h"
 #include <QObject>
-enum class EmissionType
-{
-    F1B,
-    F7B,
-    G1B,
-    J3E,
-    B8E,
-    R3E,
-    H3E,
-    F3EJ,
-    F3EA,
-    A1A,
-    A3E,
-    A2A
-};
 
 class WorkModeData : public QObject
 {
     Q_OBJECT
 public:
     explicit WorkModeData(QObject* parent = nullptr);
+    void fromWorkModeDefault(const WorkModeDefault&);
+
+    EmissionType emission() const;
+    void setEmission(EmissionType newEmission);
+
+    QList<int> deviationList() const;
+    int deviation() const;
+    void setDeviation(int newSelectedDeviation);
+
+    QList<int> bitrateListAvailable() const;
+
+    int bitrate() const;
+    void setBitrate(int newSelectedBitrate);
 
 private:
     EmissionType m_emission;
     QList<int> m_deviationList;
-    int m_selectedDeviation;
+    int m_selectedDeviation{-1};
     QList<int> m_bitrateList;
-    int m_selectedBitrate;
+    int m_selectedBitrate{-1};
+
+private:
+    void bitrateDefault();
 
 signals:
+    void updateView();
+    void selectedDeviationChanged(int value);
+    void selectedBitrateChanged(int value);
 };
 
 #endif   // WORKMODEDATA_H
