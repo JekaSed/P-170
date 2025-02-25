@@ -14,7 +14,7 @@ const QString freq{"freq"};
 }   // namespace
 
 FrequencyWidget::FrequencyWidget(QWidget* parent)
-  : Cloud{title, parent}
+  : Cloud{title, parent, theme::foregroundColor_1()}
   , m_freqEditWidget(new FreqEditWidget(this))
 {
     setMinimumSize(300, 150);

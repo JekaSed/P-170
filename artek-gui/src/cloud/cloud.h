@@ -12,7 +12,7 @@ class Cloud : public QWidget
 {
     Q_OBJECT
 public:
-    Cloud(const QString& title, QWidget* p, const QColor& bgColor = theme::foregroundColor(),
+    Cloud(const QString& title, QWidget* p, const QColor& bgColor = theme::backgroundColor(),
           QPair<qreal, qreal> collapseDegrees = {0.0, 180.0});
     ~Cloud() override;
     QHBoxLayout* titleLayout();

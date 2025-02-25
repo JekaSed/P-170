@@ -1,8 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "artek-widget.h"
 #include <QMainWindow>
+#include <artek-editor.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,7 +20,7 @@ public:
 
 private:
     Ui::MainWindow* ui;
-    ArtekWidget* m_radioWidget;
+    ArtekEditor* m_artek;
 
     // QWidget interface
 protected:

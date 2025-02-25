@@ -21,6 +21,7 @@ private:
     WorkModeWidget* m_wmWidget;
 
 signals:
+    void changed();
 };
 
 #endif   // ARTEKWIDGET_H

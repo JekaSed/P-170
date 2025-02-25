@@ -28,14 +28,16 @@ const QString isMute{"isMute"};
 }   // namespace
 
 VolumeWidget::VolumeWidget(QWidget* parent)
-  : Cloud{title, parent}
+  : Cloud{title, parent, theme::foregroundColor_1()}
   , m_slider(new QtMaterialSlider(this))
   , m_valueWidget(new LCDNumber(this))
   , m_muteBt(makeIconButton(theme::muteIcon(), "Выкл", {30, 30}))
 {
-    m_slider->setOrientation(Qt::Vertical);
+    //    m_slider->setOrientation(Qt::Vertical);
     m_slider->setMaximum(100);
-    m_slider->setInvertedAppearance(true);
+    //    m_slider->setInvertedAppearance(true);
+
+    auto* mainLy = new QHBoxLayout();
 
     m_valueWidget->setRange(0, 100);
     m_valueWidget->setInteractive(true);
@@ -44,10 +46,11 @@ VolumeWidget::VolumeWidget(QWidget* parent)
     m_valueWidget->setNumber(0);
     m_valueWidget->setOnColor(theme::textColor());
 
-    contentLayout()->addWidget(m_slider, 1, Qt::AlignHCenter);
-    contentLayout()->addWidget(m_muteBt, 0, Qt::AlignHCenter | Qt::AlignTop);
-    contentLayout()->addWidget(m_valueWidget, 0, Qt::AlignHCenter | Qt::AlignTop);
-    contentLayout()->setSpacing(15);
+    mainLy->addWidget(m_slider, 1, Qt::AlignVCenter);
+    mainLy->addWidget(m_muteBt, 0, Qt::AlignVCenter | Qt::AlignRight);
+    mainLy->addWidget(m_valueWidget, 0, Qt::AlignVCenter | Qt::AlignRight);
+    mainLy->setSpacing(15);
+    contentLayout()->addLayout(mainLy);
 
     connect(m_slider, &QAbstractSlider::valueChanged, this, [this](const int v) {
         qDebug() << "slider" << v;
@@ -74,10 +77,6 @@ VolumeWidget::VolumeWidget(QWidget* parent)
 
     connect(this, &VolumeWidget::volumeChanged, this, [](int v) {
         qDebug() << "VOLUME CHANGED" << v;
-    });
-
-    QTimer::singleShot(100, this, [this]() {
-        setVolume(44);
     });
 }
 

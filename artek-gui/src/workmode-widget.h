@@ -22,6 +22,9 @@ private:
 private:
     void updateDeviations();
     void updateBitrates();
+
+signals:
+    void changed();
 };
 
 #endif   // WORKMODEWIDGET_H

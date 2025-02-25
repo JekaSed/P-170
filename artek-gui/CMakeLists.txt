@@ -39,7 +39,7 @@ file(GLOB_RECURSE SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 file(GLOB_RECURSE H ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
 file(GLOB_RECURSE Q_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.qrc)
 
-set(SOURCES artek-widget.h artek-widget.cpp)
+set(SOURCES artek-widget.h artek-widget.cpp artek-editor.h artek-editor.cpp)
 #add_library(tdr84-widget STATIC ${SRC} ${Q_RESOURCES})
 add_library(${PROJECT_NAME} STATIC ${SRC} ${H} ${Q_RESOURCES} ${SOURCES})
 

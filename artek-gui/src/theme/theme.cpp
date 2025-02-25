@@ -236,7 +236,7 @@ const QIcon& plusIcon()
 
 const QIcon& openFileIcon()
 {
-    static const QIcon ic(":/resources/icons/folder-open.png");
+    static const QIcon ic(":/resources/icons/open.png");
     return ic;
 }
 
@@ -483,6 +483,12 @@ QString progressBarCSS()
 const QIcon& muteIcon()
 {
     static const QIcon ic(":/resources/icons/mute.png");
+    return ic;
+}
+
+const QIcon& saveAsIcon()
+{
+    static const QIcon ic(":/resources/icons/save-as.png");
     return ic;
 }
 

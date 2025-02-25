@@ -31,10 +31,8 @@ void WorkModeData::fromWorkModeDefault(const WorkModeDefault& wmDefault)
     m_deviationList = wmDefault.m_deviationList;
     m_bitrateList = wmDefault.m_bitrateList;
     m_selectedDeviation = -1;
-    m_selectedBitrate = -1;
     bitrateDefault();
     lock.unblock();
-
     emit updateView();
 }
 
@@ -102,7 +100,7 @@ QJsonObject WorkModeData::toJsonObj() const
 {
     QJsonObject workMode;
     workMode.insert(jsonKey::emission, emissionToString(m_emission));
-    if (m_selectedBitrate > 0) {
+    if (m_selectedDeviation > 0) {
         workMode.insert(jsonKey::deviation, m_selectedDeviation);
     }
     if (m_selectedBitrate > 0) {
@@ -113,12 +111,13 @@ QJsonObject WorkModeData::toJsonObj() const
 
 void WorkModeData::fromJsonObj(const QJsonObject& obj)
 {
-    QSignalBlocker lock(this);
-    fromWorkModeDefault(getDefault(stringToEmission(obj[jsonKey::emission].toString())));
+    m_emission = stringToEmission(obj[jsonKey::emission].toString());
+    auto defWM = getDefault(m_emission);
+    m_deviationList = defWM.m_deviationList;
+    m_bitrateList = defWM.m_bitrateList;
     m_selectedDeviation = obj[jsonKey::deviation].toInt(-1);
     m_selectedBitrate = obj[jsonKey::bitrate].toInt(-1);
 
-    lock.unblock();
     emit updateView();
 }
 

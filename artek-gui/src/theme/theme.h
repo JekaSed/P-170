@@ -60,6 +60,8 @@ const QIcon& redoIcon();
 
 const QIcon& openFileIcon();
 const QIcon& saveFileIcon();
+const QIcon& saveAsIcon();
+
 const QIcon& activeIcon();
 const QIcon& closeIcon();
 const QIcon& sendIcon();

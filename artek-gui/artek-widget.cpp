@@ -22,10 +22,19 @@ ArtekWidget::ArtekWidget(QWidget* parent)
   , m_volWidget(new VolumeWidget(this))
   , m_wmWidget(new WorkModeWidget(this))
 {
-    auto mainLy = new QHBoxLayout(this);
+    //    setObjectName("ArtekWidget");
+    //    setStyleSheet(QString("QWidget#ArtekWidget {background-color: %1}").arg(theme::foregroundColor_2().name()));
+    //    setAttribute(Qt::WA_Hover);
+    setAttribute(Qt::WA_StyledBackground);
+
+    auto mainLy = new QVBoxLayout(this);
     mainLy->addWidget(m_freqWidget);
     mainLy->addWidget(m_volWidget);
     mainLy->addWidget(m_wmWidget);
+
+    connect(m_freqWidget, &FrequencyWidget::freqChanged, this, &ArtekWidget::changed);
+    connect(m_volWidget, &VolumeWidget::volumeChanged, this, &ArtekWidget::changed);
+    connect(m_wmWidget, &WorkModeWidget::changed, this, &ArtekWidget::changed);
 }
 
 QJsonObject ArtekWidget::toJsonObj() const

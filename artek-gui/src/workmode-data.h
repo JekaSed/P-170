@@ -28,10 +28,10 @@ public:
     void fromJsonObj(const QJsonObject& obj);
 
 private:
-    EmissionType m_emission;
-    QList<int> m_deviationList;
+    EmissionType m_emission{EmissionType::F1B};
+    QList<int> m_deviationList{};
     int m_selectedDeviation{-1};
-    QList<int> m_bitrateList;
+    QList<int> m_bitrateList{};
     int m_selectedBitrate{-1};
 
 private:

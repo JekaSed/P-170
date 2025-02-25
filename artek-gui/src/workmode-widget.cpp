@@ -27,12 +27,13 @@ QComboBox* makeComboBox(const QString& label, const QStringList& items, QWidget*
 }   // namespace
 
 WorkModeWidget::WorkModeWidget(QWidget* p)
-  : Cloud(title, p)
+  : Cloud(title, p, theme::foregroundColor_1())
   , m_data(new WorkModeData(this))
   , m_emissionCb(makeComboBox("Тип излучения", emissionTextList(), this))
   , m_deviationCb(makeComboBox("Девиация", {}, this))
   , m_bitrateCb(makeComboBox("Скорость", {}, this))
 {
+    setMinimumHeight(250);
     auto* mainLy = contentLayout();
     mainLy->setSpacing(15);
 
@@ -53,6 +54,7 @@ WorkModeWidget::WorkModeWidget(QWidget* p)
         m_emissionCb->setCurrentIndex(static_cast<int>(m_data->emission()));
         updateDeviations();
         updateBitrates();
+        emit changed();
     });
 
     connect(m_deviationCb, &QComboBox::currentIndexChanged, this, [this](int i) {
@@ -68,10 +70,12 @@ WorkModeWidget::WorkModeWidget(QWidget* p)
     connect(m_data, &WorkModeData::selectedDeviationChanged, this, [this](int dev) {
         m_deviationCb->setCurrentIndex(m_data->deviationList().indexOf(dev));
         updateBitrates();
+        emit changed();
     });
 
     connect(m_data, &WorkModeData::selectedBitrateChanged, this, [this](int bRate) {
         m_bitrateCb->setCurrentIndex(m_data->bitrateListAvailable().indexOf(bRate));
+        emit changed();
     });
 
     connect(m_bitrateCb, &QComboBox::currentIndexChanged, this, [this](int i) {
@@ -92,6 +96,8 @@ QJsonObject WorkModeWidget::toJsonObj() const
 
 void WorkModeWidget::fromJsonObj(const QJsonObject& obj)
 {
+    QSignalBlocker lock(this);
+    QSignalBlocker lockDev(m_emissionCb);
     m_data->fromJsonObj(obj);
 }
 
