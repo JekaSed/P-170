@@ -2,6 +2,7 @@
 #include "qtmaterialslider.h"
 #include "src/frequency/LCDNumber.h"
 
+#include <QJsonObject>
 #include <QTimer>
 
 #include <src/menu-button/menu-button.h>
@@ -18,6 +19,11 @@ QAbstractButton* makeIconButton(const QIcon& icon, const QString& toolTip, const
     b->setCheckable(true);
     return b;
 }
+
+namespace jsonKey {
+const QString volume{"volume"};
+const QString isMute{"isMute"};
+}   // namespace jsonKey
 
 }   // namespace
 
@@ -95,4 +101,28 @@ void VolumeWidget::setVolume(const int volume)
 int VolumeWidget::getVolume() const
 {
     return m_valueWidget->currentNumber();
+}
+
+QJsonObject VolumeWidget::toJsonObj() const
+{
+    QJsonObject result;
+    bool isMute = m_muteBt->isChecked();
+    result.insert(jsonKey::isMute, isMute);
+    result.insert(jsonKey::volume, isMute ? m_lastMutedValue : getVolume());
+    return result;
+}
+
+void VolumeWidget::fromJsonObj(const QJsonObject& obj)
+{
+    const bool isMute = obj[jsonKey::isMute].toBool();
+    const int volume = obj[jsonKey::volume].toInt();
+
+    QSignalBlocker lock(this);
+    if (isMute) {
+        setVolume(volume);
+        m_muteBt->setChecked(true);
+    } else {
+        m_muteBt->setChecked(false);
+        setVolume(volume);
+    }
 }

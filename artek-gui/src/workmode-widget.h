@@ -10,6 +10,8 @@ class WorkModeWidget : public Cloud
     Q_OBJECT
 public:
     WorkModeWidget(QWidget* p);
+    QJsonObject toJsonObj() const;
+    void fromJsonObj(const QJsonObject& obj);
 
 private:
     class WorkModeData* m_data;

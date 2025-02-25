@@ -10,6 +10,8 @@ class FrequencyWidget : public Cloud
     Q_OBJECT
 public:
     explicit FrequencyWidget(QWidget* parent = nullptr);
+    QJsonObject toJsonObj() const;
+    void fromJsonObj(const QJsonObject& obj);
 
 private:
     FreqEditWidget* m_freqEditWidget;

@@ -3,9 +3,10 @@
 
 #include <src/combobox/qtmaterialcombobox.h>
 
+#include <QJsonObject>
+
 namespace {
 const QString title{"Класс излучения"};
-const QStringList emissionText{"F1B", "F7B", "G1B", "J3E", "B8E", "R3E", "H3E", "F3EJ", "F3EA", "A1A", "A3E", "A2A"};
 const QStringList intListToStrings(const QList<int>& intList)
 {
     QStringList r;
@@ -28,7 +29,7 @@ QComboBox* makeComboBox(const QString& label, const QStringList& items, QWidget*
 WorkModeWidget::WorkModeWidget(QWidget* p)
   : Cloud(title, p)
   , m_data(new WorkModeData(this))
-  , m_emissionCb(makeComboBox("Тип излучения", emissionText, this))
+  , m_emissionCb(makeComboBox("Тип излучения", emissionTextList(), this))
   , m_deviationCb(makeComboBox("Девиация", {}, this))
   , m_bitrateCb(makeComboBox("Скорость", {}, this))
 {
@@ -82,6 +83,16 @@ WorkModeWidget::WorkModeWidget(QWidget* p)
         Q_ASSERT(i >= 0 && i < values.size());
         m_data->setBitrate(values[i]);
     });
+}
+
+QJsonObject WorkModeWidget::toJsonObj() const
+{
+    return m_data->toJsonObj();
+}
+
+void WorkModeWidget::fromJsonObj(const QJsonObject& obj)
+{
+    m_data->fromJsonObj(obj);
 }
 
 void WorkModeWidget::updateDeviations()

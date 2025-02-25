@@ -12,6 +12,9 @@ class ArtekWidget : public QWidget
 public:
     explicit ArtekWidget(QWidget* parent = nullptr);
 
+    QJsonObject toJsonObj() const;
+    void fromJsonObj(const QJsonObject& obj);
+
 private:
     FrequencyWidget* m_freqWidget;
     VolumeWidget* m_volWidget;

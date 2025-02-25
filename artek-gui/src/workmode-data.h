@@ -23,6 +23,10 @@ public:
     int bitrate() const;
     void setBitrate(int newSelectedBitrate);
 
+    //JSON
+    QJsonObject toJsonObj() const;
+    void fromJsonObj(const QJsonObject& obj);
+
 private:
     EmissionType m_emission;
     QList<int> m_deviationList;

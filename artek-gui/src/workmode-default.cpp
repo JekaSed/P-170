@@ -1,4 +1,10 @@
 #include "workmode-default.h"
+#include "qdebug.h"
+
+namespace {
+const QStringList emissionStrings{"F1B", "F7B", "G1B", "J3E", "B8E", "R3E", "H3E", "F3EJ", "F3EA", "A1A", "A3E", "A2A"};
+
+}
 
 WorkModeDefault getDefault(EmissionType emissionClass)
 {
@@ -32,4 +38,24 @@ WorkModeDefault getDefault(EmissionType emissionClass)
         break;
     }
     return {};
+}
+
+QString emissionToString(const EmissionType emission)
+{
+    return emissionStrings[static_cast<int>(emission)];
+}
+
+EmissionType stringToEmission(const QString& str)
+{
+    auto i = emissionStrings.indexOf(str);
+    if (i == -1) {
+        qWarning() << "invalid emission type string" << str;
+        return {};
+    }
+    return static_cast<EmissionType>(i);
+}
+
+QStringList emissionTextList()
+{
+    return emissionStrings;
 }

@@ -14,6 +14,9 @@ public:
     void setVolume(const int volume);
     int getVolume() const;
 
+    QJsonObject toJsonObj() const;
+    void fromJsonObj(const QJsonObject& obj);
+
 private:
     QAbstractSlider* m_slider;
     class LCDNumber* m_valueWidget;

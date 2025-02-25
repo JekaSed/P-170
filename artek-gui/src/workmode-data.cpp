@@ -1,6 +1,25 @@
 #include "workmode-data.h"
 #include "qdebug.h"
 
+#include <QJsonObject>
+
+namespace {
+namespace jsonKey {
+
+const QString emission{"emission"};
+const QString deviation{"deviation"};
+const QString bitrate{"bitrate"};
+
+const QString power{"power"};
+const QString diagnostics{"diagnostics"};
+const QString mode{"mode"};
+const QString state{"state"};
+const QString errorCode{"errorCode"};
+const QString halfDuplexMode{"halfDuplexMode"};
+
+}   // namespace jsonKey
+}   // namespace
+
 WorkModeData::WorkModeData(QObject* parent)
   : QObject{parent}
 {}
@@ -77,6 +96,30 @@ void WorkModeData::setBitrate(int newSelectedBitrate)
         return;
     m_selectedBitrate = newSelectedBitrate;
     emit selectedBitrateChanged(newSelectedBitrate);
+}
+
+QJsonObject WorkModeData::toJsonObj() const
+{
+    QJsonObject workMode;
+    workMode.insert(jsonKey::emission, emissionToString(m_emission));
+    if (m_selectedBitrate > 0) {
+        workMode.insert(jsonKey::deviation, m_selectedDeviation);
+    }
+    if (m_selectedBitrate > 0) {
+        workMode.insert(jsonKey::bitrate, m_selectedBitrate);
+    }
+    return workMode;
+}
+
+void WorkModeData::fromJsonObj(const QJsonObject& obj)
+{
+    QSignalBlocker lock(this);
+    fromWorkModeDefault(getDefault(stringToEmission(obj[jsonKey::emission].toString())));
+    m_selectedDeviation = obj[jsonKey::deviation].toInt(-1);
+    m_selectedBitrate = obj[jsonKey::bitrate].toInt(-1);
+
+    lock.unblock();
+    emit updateView();
 }
 
 void WorkModeData::bitrateDefault()

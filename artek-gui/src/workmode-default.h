@@ -26,3 +26,6 @@ struct WorkModeDefault
 };
 
 WorkModeDefault getDefault(EmissionType emissionClass);
+QString emissionToString(const EmissionType emission);
+EmissionType stringToEmission(const QString& str);
+QStringList emissionTextList();
