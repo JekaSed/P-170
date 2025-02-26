@@ -3,7 +3,6 @@
 #include "src/frequency/LCDNumber.h"
 
 #include <QJsonObject>
-#include <QTimer>
 
 #include <src/menu-button/menu-button.h>
 
