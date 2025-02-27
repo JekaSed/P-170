@@ -22,9 +22,10 @@ private:
 private:
     void updateDeviations();
     void updateBitrates();
+    void emitChangedSignal();
 
 signals:
-    void changed();
+    void changed(const QJsonObject&);
 };
 
 #endif   // WORKMODEWIDGET_H

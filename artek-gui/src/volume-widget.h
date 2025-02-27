@@ -24,7 +24,7 @@ private:
     int m_lastMutedValue;
 
 signals:
-    void volumeChanged(int);
+    void volumeChanged(const QJsonObject& obj);
 };
 
 #endif   // VOLUMEWIDGET_H

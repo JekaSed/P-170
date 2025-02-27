@@ -41,7 +41,8 @@ public:
         lay->addWidget(m_artekWidget, 0, Qt::AlignTop);
         //        lay->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
-        connect(m_artekWidget, &ArtekWidget::changed, this, [this]() {
+        connect(m_artekWidget, &ArtekWidget::changed, this, [this](auto& o) {
+            qDebug() << "changed" << o;
             emit documentChanged(currentDocument());
         });
 

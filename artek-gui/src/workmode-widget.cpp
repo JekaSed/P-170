@@ -54,7 +54,7 @@ WorkModeWidget::WorkModeWidget(QWidget* p)
         m_emissionCb->setCurrentIndex(static_cast<int>(m_data->emission()));
         updateDeviations();
         updateBitrates();
-        emit changed();
+        emitChangedSignal();
     });
 
     connect(m_deviationCb, &QComboBox::currentIndexChanged, this, [this](int i) {
@@ -70,12 +70,12 @@ WorkModeWidget::WorkModeWidget(QWidget* p)
     connect(m_data, &WorkModeData::selectedDeviationChanged, this, [this](int dev) {
         m_deviationCb->setCurrentIndex(m_data->deviationList().indexOf(dev));
         updateBitrates();
-        emit changed();
+        emitChangedSignal();
     });
 
     connect(m_data, &WorkModeData::selectedBitrateChanged, this, [this](int bRate) {
         m_bitrateCb->setCurrentIndex(m_data->bitrateListAvailable().indexOf(bRate));
-        emit changed();
+        emitChangedSignal();
     });
 
     connect(m_bitrateCb, &QComboBox::currentIndexChanged, this, [this](int i) {
@@ -129,4 +129,9 @@ void WorkModeWidget::updateBitrates()
         m_bitrateCb->addItems(intListToStrings(values));
         m_bitrateCb->setCurrentIndex(values.indexOf(m_data->bitrate()));
     }
+}
+
+void WorkModeWidget::emitChangedSignal()
+{
+    emit changed(toJsonObj());
 }

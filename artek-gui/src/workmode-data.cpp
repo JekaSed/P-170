@@ -16,6 +16,7 @@ const QString mode{"mode"};
 const QString state{"state"};
 const QString errorCode{"errorCode"};
 const QString halfDuplexMode{"halfDuplexMode"};
+const QString workMode{"workMode"};
 
 }   // namespace jsonKey
 }   // namespace
@@ -98,25 +99,26 @@ void WorkModeData::setBitrate(int newSelectedBitrate)
 
 QJsonObject WorkModeData::toJsonObj() const
 {
-    QJsonObject workMode;
-    workMode.insert(jsonKey::emission, emissionToString(m_emission));
+    QJsonObject workModeObj;
+    workModeObj.insert(jsonKey::emission, emissionToString(m_emission));
     if (m_selectedDeviation > 0) {
-        workMode.insert(jsonKey::deviation, m_selectedDeviation);
+        workModeObj.insert(jsonKey::deviation, m_selectedDeviation);
     }
     if (m_selectedBitrate > 0) {
-        workMode.insert(jsonKey::bitrate, m_selectedBitrate);
+        workModeObj.insert(jsonKey::bitrate, m_selectedBitrate);
     }
-    return workMode;
+    return {{jsonKey::workMode, workModeObj}};
 }
 
 void WorkModeData::fromJsonObj(const QJsonObject& obj)
 {
-    m_emission = stringToEmission(obj[jsonKey::emission].toString());
+    QJsonObject workModeJson = obj[jsonKey::workMode].toObject();
+    m_emission = stringToEmission(workModeJson[jsonKey::emission].toString());
     auto defWM = getDefault(m_emission);
     m_deviationList = defWM.m_deviationList;
     m_bitrateList = defWM.m_bitrateList;
-    m_selectedDeviation = obj[jsonKey::deviation].toInt(-1);
-    m_selectedBitrate = obj[jsonKey::bitrate].toInt(-1);
+    m_selectedDeviation = workModeJson[jsonKey::deviation].toInt(-1);
+    m_selectedBitrate = workModeJson[jsonKey::bitrate].toInt(-1);
 
     emit updateView();
 }

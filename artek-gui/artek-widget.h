@@ -21,7 +21,7 @@ private:
     WorkModeWidget* m_wmWidget;
 
 signals:
-    void changed();
+    void changed(const QJsonObject&);
 };
 
 #endif   // ARTEKWIDGET_H

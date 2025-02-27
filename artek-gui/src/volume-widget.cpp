@@ -22,6 +22,7 @@ QAbstractButton* makeIconButton(const QIcon& icon, const QString& toolTip, const
 namespace jsonKey {
 const QString volume{"volume"};
 const QString isMute{"isMute"};
+const QString speaker{"speaker"};
 }   // namespace jsonKey
 
 }   // namespace
@@ -74,7 +75,7 @@ VolumeWidget::VolumeWidget(QWidget* parent)
         }
     });
 
-    connect(this, &VolumeWidget::volumeChanged, this, [](int v) {
+    connect(this, &VolumeWidget::volumeChanged, this, [](auto v) {
         qDebug() << "VOLUME CHANGED" << v;
     });
 }
@@ -93,7 +94,7 @@ void VolumeWidget::setVolume(const int volume)
     m_slider->setValue(changedValue);
     m_muteBt->setChecked(changedValue == 0);
 
-    emit volumeChanged(changedValue);
+    emit volumeChanged(toJsonObj());
 }
 
 int VolumeWidget::getVolume() const
@@ -103,17 +104,19 @@ int VolumeWidget::getVolume() const
 
 QJsonObject VolumeWidget::toJsonObj() const
 {
-    QJsonObject result;
+    QJsonObject volJson;
     bool isMute = m_muteBt->isChecked();
-    result.insert(jsonKey::isMute, isMute);
-    result.insert(jsonKey::volume, isMute ? m_lastMutedValue : getVolume());
-    return result;
+    volJson.insert(jsonKey::isMute, isMute);
+    volJson.insert(jsonKey::volume, isMute ? m_lastMutedValue : getVolume());
+    return {{jsonKey::speaker, volJson}};
 }
 
 void VolumeWidget::fromJsonObj(const QJsonObject& obj)
 {
-    const bool isMute = obj[jsonKey::isMute].toBool();
-    const int volume = obj[jsonKey::volume].toInt();
+    QJsonObject volObj = obj[jsonKey::speaker].toObject();
+
+    const bool isMute = volObj[jsonKey::isMute].toBool();
+    const int volume = volObj[jsonKey::volume].toInt();
 
     QSignalBlocker lock(this);
     if (isMute) {

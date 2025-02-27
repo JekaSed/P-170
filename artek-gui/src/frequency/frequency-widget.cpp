@@ -25,7 +25,9 @@ FrequencyWidget::FrequencyWidget(QWidget* parent)
     m_freqEditWidget->setMinimumHeight(55);
     contentLayout()->addWidget(m_freqEditWidget);
 
-    connect(m_freqEditWidget, &FreqEditWidget::freqChanged, this, &FrequencyWidget::freqChanged);
+    connect(m_freqEditWidget, &FreqEditWidget::freqChanged, this, [this]() {
+        emit freqChanged(toJsonObj());
+    });
 }
 
 QJsonObject FrequencyWidget::toJsonObj() const

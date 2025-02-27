@@ -16,7 +16,7 @@ public:
 private:
     FreqEditWidget* m_freqEditWidget;
 signals:
-    void freqChanged(long int);
+    void freqChanged(const QJsonObject& obj);
 };
 
 #endif   // FREQUENCYWIDGET_H
