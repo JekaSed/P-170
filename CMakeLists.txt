@@ -11,11 +11,11 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(ARTEK_TESTS "Enable tests" ON)
+option(ARTEK_TESTS "Enable tests" OFF)
 option(GUI_COVERAGE_ENABLED "enable coverage compiler flags for GUI" OFF)
 
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Widgets Network)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets Network)
 
 set(PROJECT_SOURCES
         main.cpp

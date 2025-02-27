@@ -7,6 +7,7 @@
 #include <QApplication>
 #include <QTimer>
 #include <qtmaterialtoggle.h>
+#include <src/communicator.h>
 
 namespace {
 const QString title{"Радиостанция Р170-П"};
@@ -33,6 +34,7 @@ public:
       : RadioDataWidget(parent)
       , m_artekWidget(new ArtekWidget(this))
       , m_schemeSaver(new SchemeSaver(this))
+      , m_driver(new Communicator(this))
     {
         //        setObjectName("ArtekRadioWidget");
         //        setStyleSheet(QString("QWidget#ArtekRadioWidget {background-color: %1}").arg(theme::backgroundColor().name()));
@@ -43,7 +45,12 @@ public:
 
         connect(m_artekWidget, &ArtekWidget::changed, this, [this](auto& o) {
             qDebug() << "changed" << o;
+            m_driver->sendRequest("default", o);
             emit documentChanged(currentDocument());
+        });
+
+        connect(m_driver, &Communicator::stateChanged, this, [this](const QJsonDocument& d) {
+            m_artekWidget->fromJsonObj(d.object());
         });
 
         connect(m_schemeSaver, &SchemeSaver::filePathChanged, this, &ArtekRadioWidget::fileNameChanged);
@@ -73,6 +80,7 @@ signals:
 private:
     ArtekWidget* m_artekWidget;
     SchemeSaver* m_schemeSaver;
+    Communicator* m_driver;
 
     // RadioDataWidget interface
 public:
