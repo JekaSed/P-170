@@ -44,13 +44,21 @@ public:
         //        lay->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
         connect(m_artekWidget, &ArtekWidget::changed, this, [this](auto& o) {
-            qDebug() << "changed" << o;
+            m_artekWidget->freeze(std::chrono::seconds(1));
+            //            m_artekWidget->setEnabled(false);
             m_driver->sendRequest("default", o);
             emit documentChanged(currentDocument());
         });
 
         connect(m_driver, &Communicator::stateChanged, this, [this](const QJsonDocument& d) {
-            m_artekWidget->fromJsonObj(d.object());
+            if (!ArtekWidget::isValidJson(d.object())) {
+                qWarning() << "Ошибка данных";
+                return;
+            }
+            qDebug() << d;
+            m_artekWidget->unfreeze();
+            //            m_artekWidget->setEnabled(true);
+            m_artekWidget->setNewState(d.object());
         });
 
         connect(m_schemeSaver, &SchemeSaver::filePathChanged, this, &ArtekRadioWidget::fileNameChanged);

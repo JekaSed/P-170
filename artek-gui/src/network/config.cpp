@@ -82,7 +82,7 @@ QString dataTransmitterEndpoint()
 
 QString r170DriverEndpoint()
 {
-    return QString("http://127.0.0.1");
+    return QString("http://127.0.0.1:12211");
 }
 
 }   // namespace config

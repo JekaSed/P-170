@@ -53,17 +53,17 @@ VolumeWidget::VolumeWidget(QWidget* parent)
     contentLayout()->addLayout(mainLy);
 
     connect(m_slider, &QAbstractSlider::valueChanged, this, [this](const int v) {
-        qDebug() << "slider" << v;
+        //        qDebug() << "slider" << v;
         setVolume(v);
     });
 
     connect(m_valueWidget, &LCDNumber::numberChanged, this, [this](int v) {
-        qDebug() << "LCDNumber" << v;
+        //        qDebug() << "LCDNumber" << v;
         setVolume(v);
     });
 
     connect(m_muteBt, &QAbstractButton::toggled, this, [this](bool checked) {
-        qDebug() << "muted" << m_muteBt->isChecked();
+        //        qDebug() << "muted" << m_muteBt->isChecked();
         if (checked) {
             m_lastMutedValue = getVolume();
             setVolume(0);
@@ -76,7 +76,7 @@ VolumeWidget::VolumeWidget(QWidget* parent)
     });
 
     connect(this, &VolumeWidget::volumeChanged, this, [](auto v) {
-        qDebug() << "VOLUME CHANGED" << v;
+        qDebug() << "[VolumeWidget]: VOLUME CHANGED" << v;
     });
 }
 
