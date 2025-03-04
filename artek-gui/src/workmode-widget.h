@@ -18,6 +18,7 @@ private:
     QComboBox* m_emissionCb;
     QComboBox* m_deviationCb;
     QComboBox* m_bitrateCb;
+    QComboBox* m_sideBandCb;
 
 private:
     void updateDeviations();
@@ -26,6 +27,10 @@ private:
 
 signals:
     void changed(const QJsonObject&);
+
+    // QWidget interface
+protected:
+    void paintEvent(QPaintEvent *event) override;
 };
 
 #endif   // WORKMODEWIDGET_H

@@ -28,7 +28,6 @@ private:
     WorkModeWidget* m_wmWidget;
     QMap<QString, QJsonObject> m_changes;
     QTimer m_lastSendTimer;
-    void emitChangedSignal(const QString& key, const QJsonObject& value);
 
 private:
     void sendChange(const QString& key, const QJsonObject& value);

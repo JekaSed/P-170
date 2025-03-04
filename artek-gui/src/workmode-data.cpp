@@ -17,8 +17,10 @@ const QString state{"state"};
 const QString errorCode{"errorCode"};
 const QString halfDuplexMode{"halfDuplexMode"};
 const QString workMode{"workMode"};
+const QString sideBand{"sideBand"};
 
 }   // namespace jsonKey
+
 }   // namespace
 
 WorkModeData::WorkModeData(QObject* parent)
@@ -31,8 +33,13 @@ void WorkModeData::fromWorkModeDefault(const WorkModeDefault& wmDefault)
     m_emission = wmDefault.m_emission;
     m_deviationList = wmDefault.m_deviationList;
     m_bitrateList = wmDefault.m_bitrateList;
-    m_selectedDeviation = -1;
+    m_selectedDeviation = m_deviationList.isEmpty() ? -1 : m_deviationList.first();
     bitrateDefault();
+    if (m_emission == EmissionType::J3E || m_emission == EmissionType::R3E || m_emission == EmissionType::H3E) {
+        m_sideBand = 0;
+    } else {
+        m_sideBand = -1;
+    }
     lock.unblock();
     emit updateView();
 }
@@ -42,7 +49,7 @@ EmissionType WorkModeData::emission() const
     return m_emission;
 }
 
-void WorkModeData::setEmission(EmissionType newEmission)
+void WorkModeData::loadDefault(EmissionType newEmission)
 {
     fromWorkModeDefault(getDefault(newEmission));
 }
@@ -107,6 +114,9 @@ QJsonObject WorkModeData::toJsonObj() const
     if (m_selectedBitrate > 0) {
         workModeObj.insert(jsonKey::bitrate, m_selectedBitrate);
     }
+    if (m_sideBand == 0 || m_sideBand == 1) {
+        workModeObj.insert(jsonKey::sideBand, sideBandMap.values()[m_sideBand]);
+    }
     return {{jsonKey::workMode, workModeObj}};
 }
 
@@ -121,6 +131,43 @@ void WorkModeData::fromJsonObj(const QJsonObject& obj)
     m_selectedBitrate = workModeJson[jsonKey::bitrate].toInt(-1);
 
     emit updateView();
+}
+
+int WorkModeData::sideBand() const
+{
+    return m_sideBand;
+}
+
+void WorkModeData::setSideBand(int newSideBand)
+{
+    if (m_sideBand == newSideBand)
+        return;
+    m_sideBand = newSideBand;
+    emit sideBandChanged(newSideBand);
+}
+
+bool WorkModeData::isValid() const
+{
+    switch (m_emission) {
+    case EmissionType::F1B:
+    case EmissionType::F7B:
+        return m_selectedDeviation > 0 && m_selectedBitrate > 0;
+    case EmissionType::G1B:
+        return m_selectedBitrate > 0;
+    case EmissionType::J3E:
+    case EmissionType::R3E:
+    case EmissionType::H3E:
+        return m_sideBand == 0 || m_sideBand == 1;
+    case EmissionType::A1A:
+        return m_selectedDeviation > 0;
+    case EmissionType::B8E:
+    case EmissionType::F3EJ:
+    case EmissionType::F3EA:
+    case EmissionType::A3E:
+    case EmissionType::A2A:
+        break;
+    }
+    return true;
 }
 
 void WorkModeData::bitrateDefault()

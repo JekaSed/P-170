@@ -44,8 +44,8 @@ public:
         //        lay->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
         connect(m_artekWidget, &ArtekWidget::changed, this, [this](auto& o) {
-            m_artekWidget->freeze(std::chrono::seconds(1));
-            //            m_artekWidget->setEnabled(false);
+            //            m_artekWidget->freeze(std::chrono::seconds(1));
+            m_artekWidget->setEnabled(false);
             m_driver->sendRequest("default", o);
             emit documentChanged(currentDocument());
         });
@@ -53,11 +53,12 @@ public:
         connect(m_driver, &Communicator::stateChanged, this, [this](const QJsonDocument& d) {
             if (!ArtekWidget::isValidJson(d.object())) {
                 qWarning() << "Ошибка данных";
+                m_artekWidget->setEnabled(false);
                 return;
             }
-            qDebug() << d;
-            m_artekWidget->unfreeze();
-            //            m_artekWidget->setEnabled(true);
+            qDebug() << "\nupdate incoming \n" << d << '\n';
+            //            m_artekWidget->unfreeze();
+            m_artekWidget->setEnabled(true);
             m_artekWidget->setNewState(d.object());
         });
 
@@ -152,16 +153,16 @@ void ArtekEditor::selectScheme()
         return;
     }
     m_firstStart = false;
-    const auto lastEditDoc = loadLastDocument();
-    if (!lastEditDoc.isEmpty()) {
-        {
-            if (QuestionDialog::showQuestion("Найдены данные предыдущей сессии", "Что необходимо выполнить?", this,
-                                             QPair<QString, QString>{"Загрузить данные", "Начать новую сессию"})) {
-                m_radioWidget->updateFromDocument(lastEditDoc);
-                return;
-            }
-        }
-    }
+    //    const auto lastEditDoc = loadLastDocument();
+    //    if (!lastEditDoc.isEmpty()) {
+    //        {
+    //            if (QuestionDialog::showQuestion("Найдены данные предыдущей сессии", "Что необходимо выполнить?", this,
+    //                                             QPair<QString, QString>{"Загрузить данные", "Начать новую сессию"})) {
+    //                m_radioWidget->updateFromDocument(lastEditDoc);
+    //                return;
+    //            }
+    //        }
+    //    }
     resetLocalStorage();
 }
 

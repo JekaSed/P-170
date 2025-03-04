@@ -36,6 +36,7 @@ public slots:
 
     void ready(network::Response resp) override
     {
+        qDebug() << Q_FUNC_INFO;
         const Defer defer([this] {
             QTimer::singleShot(m_timeout, this, SLOT(poll()));
         });
@@ -55,7 +56,7 @@ public slots:
         if (doc.isObject()) {
             auto obj = doc.object();
             auto cachedObj = m_cached.object();
-            if (obj != cachedObj) {
+            if (obj != cachedObj || true) {
                 m_cached.swap(doc);
                 m_owner->emitNewState(m_cached);
             }
@@ -93,11 +94,13 @@ JsonObserver::~JsonObserver() = default;
 
 void JsonObserver::emitNewState(QJsonDocument doc) noexcept
 {
+    qDebug() << Q_FUNC_INFO;
     emit stateChanged(std::move(doc));
 }
 
 void JsonObserver::start()
 {
+    qDebug() << Q_FUNC_INFO;
     m_impl->poll();
 }
 

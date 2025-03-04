@@ -1,4 +1,5 @@
 #include <QList>
+#include <QMap>
 
 #pragma once
 
@@ -24,6 +25,8 @@ struct WorkModeDefault
     QList<int> m_deviationList;
     QList<int> m_bitrateList;
 };
+
+static const QMap<QString, QString> sideBandMap{{"ВБП", "Upper"}, {"НБП", "Lower"}};
 
 WorkModeDefault getDefault(EmissionType emissionClass);
 QString emissionToString(const EmissionType emission);

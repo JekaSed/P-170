@@ -1,5 +1,4 @@
 #include "artek-widget.h"
-#include "delayed.h"
 #include "qboxlayout.h"
 
 #include <QJsonObject>
@@ -73,26 +72,21 @@ bool ArtekWidget::isValidJson(const QJsonObject& obj)
     return false;
 }
 
-void ArtekWidget::emitChangedSignal(const QString& key, const QJsonObject& value)
-{
-    emit changed({{key, value}});
-    m_lastSendTimer.start();
-}
-
 void ArtekWidget::sendChange(const QString& key, const QJsonObject& value)
 {
-    if (m_lastSendTimer.isActive()) {
-        m_changes.insert(key, value);
-    } else {
-        emitChangedSignal(key, value);
+    m_changes.insert(key, value);
+    if (!m_lastSendTimer.isActive()) {
+        m_lastSendTimer.start();
     }
 }
 
 void ArtekWidget::sendAll()
 {
+    freeze(std::chrono::milliseconds(10));
     for (const auto& key : m_changes.keys()) {
-        emitChangedSignal(key, m_changes.take(key));
+        emit changed({{key, m_changes.take(key)}});
     }
+    unfreeze();
 }
 
 void ArtekWidget::setNewState(const QJsonObject& newState)

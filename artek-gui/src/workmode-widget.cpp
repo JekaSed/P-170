@@ -4,9 +4,11 @@
 #include <src/combobox/qtmaterialcombobox.h>
 
 #include <QJsonObject>
+#include <QPainter>
 
 namespace {
 const QString title{"Класс излучения"};
+
 const QStringList intListToStrings(const QList<int>& intList)
 {
     QStringList r;
@@ -32,6 +34,7 @@ WorkModeWidget::WorkModeWidget(QWidget* p)
   , m_emissionCb(makeComboBox("Тип излучения", emissionTextList(), this))
   , m_deviationCb(makeComboBox("Девиация", {}, this))
   , m_bitrateCb(makeComboBox("Скорость", {}, this))
+  , m_sideBandCb(makeComboBox("Боковая полоса", sideBandMap.keys(), this))
 {
     setMinimumHeight(250);
     auto* mainLy = contentLayout();
@@ -40,20 +43,24 @@ WorkModeWidget::WorkModeWidget(QWidget* p)
     mainLy->addWidget(m_emissionCb);
     mainLy->addWidget(m_deviationCb);
     mainLy->addWidget(m_bitrateCb);
+    mainLy->addWidget(m_sideBandCb);
     mainLy->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     m_emissionCb->setCurrentIndex(-1);
     m_deviationCb->hide();
     m_bitrateCb->hide();
+    m_sideBandCb->hide();
 
     connect(m_emissionCb, &QComboBox::currentIndexChanged, this, [this](int i) {
-        m_data->setEmission(static_cast<EmissionType>(i));
+        m_data->loadDefault(static_cast<EmissionType>(i));
     });
 
     connect(m_data, &WorkModeData::updateView, this, [this]() {
         m_emissionCb->setCurrentIndex(static_cast<int>(m_data->emission()));
         updateDeviations();
         updateBitrates();
+        m_sideBandCb->setVisible(m_data->emission() == EmissionType::J3E);
+        m_sideBandCb->setCurrentIndex(m_data->sideBand());
         emitChangedSignal();
     });
 
@@ -86,6 +93,12 @@ WorkModeWidget::WorkModeWidget(QWidget* p)
         const auto values = m_data->bitrateListAvailable();
         Q_ASSERT(i >= 0 && i < values.size());
         m_data->setBitrate(values[i]);
+    });
+
+    connect(m_sideBandCb, &QComboBox::currentIndexChanged, m_data, &WorkModeData::setSideBand);
+    connect(m_data, &WorkModeData::sideBandChanged, this, [this](int i) {
+        m_sideBandCb->setCurrentIndex(i);
+        emitChangedSignal();
     });
 }
 
@@ -133,5 +146,22 @@ void WorkModeWidget::updateBitrates()
 
 void WorkModeWidget::emitChangedSignal()
 {
-    emit changed(toJsonObj());
+    if (m_data->isValid()) {
+        emit changed(toJsonObj());
+    }
+    update();
+}
+
+void WorkModeWidget::paintEvent(QPaintEvent* event)
+{
+    if (!m_data->isValid()) {
+        QPainter painter(this);
+        painter.setRenderHint(QPainter::Antialiasing);
+        auto p = painter.pen();
+        p.setWidth(2);
+        p.setColor(Qt::red);
+        painter.setPen(p);
+        painter.drawRoundedRect(this->rect(), 15, 15);
+    }
+    QWidget::paintEvent(event);
 }
