@@ -12,7 +12,6 @@ class VolumeWidget : public Cloud
 public:
     explicit VolumeWidget(QWidget* parent = nullptr);
     void setVolume(const int volume);
-    int getVolume() const;
 
     QJsonObject toJsonObj() const;
     void fromJsonObj(const QJsonObject& obj);
@@ -21,7 +20,7 @@ private:
     QAbstractSlider* m_slider;
     class LCDNumber* m_valueWidget;
     QAbstractButton* m_muteBt;
-    int m_lastMutedValue;
+    void emitChangedSignal();
 
 signals:
     void volumeChanged(const QJsonObject& obj);

@@ -36,29 +36,25 @@ public:
       , m_schemeSaver(new SchemeSaver(this))
       , m_driver(new Communicator(this))
     {
-        //        setObjectName("ArtekRadioWidget");
-        //        setStyleSheet(QString("QWidget#ArtekRadioWidget {background-color: %1}").arg(theme::backgroundColor().name()));
-        //        setAttribute(Qt::WA_StyledBackground);
         auto* lay = new QVBoxLayout(this);
         lay->addWidget(m_artekWidget, 0, Qt::AlignTop);
-        //        lay->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
         connect(m_artekWidget, &ArtekWidget::changed, this, [this](auto& o) {
             //            m_artekWidget->freeze(std::chrono::seconds(1));
-            m_artekWidget->setEnabled(false);
+            //            m_artekWidget->setEnabled(false);
             m_driver->sendRequest("default", o);
-            emit documentChanged(currentDocument());
+            //            emit documentChanged(currentDocument());
         });
 
         connect(m_driver, &Communicator::stateChanged, this, [this](const QJsonDocument& d) {
             if (!ArtekWidget::isValidJson(d.object())) {
                 qWarning() << "Ошибка данных";
-                m_artekWidget->setEnabled(false);
+                //                m_artekWidget->setEnabled(false);
                 return;
             }
             qDebug() << "\nupdate incoming \n" << d << '\n';
             //            m_artekWidget->unfreeze();
-            m_artekWidget->setEnabled(true);
+            //            m_artekWidget->setEnabled(true);
             m_artekWidget->setNewState(d.object());
         });
 

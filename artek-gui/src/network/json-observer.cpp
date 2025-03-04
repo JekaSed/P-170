@@ -43,10 +43,12 @@ public slots:
         QJsonParseError err{};
         auto doc = QJsonDocument::fromJson(resp.body, &err);
         if (err.error != QJsonParseError::NoError) {
+            qDebug() << Q_FUNC_INFO << err.errorString();
+            qDebug() << Q_FUNC_INFO << resp.body;
             QJsonObject obj;
             obj[QStringLiteral("error")] = resp.error;
             obj[QStringLiteral("errorDescription")] = resp.body.data();
-            if (obj != m_cached.object()) {
+            if (obj != m_cached.object() || true) {
                 qWarning() << resp.ctx.req.url().toString() << err.errorString() << resp.error;
                 m_cached.setObject(obj);
                 m_owner->emitNewState(m_cached);
@@ -60,7 +62,7 @@ public slots:
                 m_cached.swap(doc);
                 m_owner->emitNewState(m_cached);
             }
-        } else if (doc.isArray()) {
+        } else if (doc.isArray() || true) {
             auto obj = doc.array();
             auto cachedObj = m_cached.array();
             if (obj != cachedObj) {

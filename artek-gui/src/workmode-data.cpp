@@ -129,6 +129,7 @@ void WorkModeData::fromJsonObj(const QJsonObject& obj)
     m_bitrateList = defWM.m_bitrateList;
     m_selectedDeviation = workModeJson[jsonKey::deviation].toInt(-1);
     m_selectedBitrate = workModeJson[jsonKey::bitrate].toInt(-1);
+    m_sideBand = sideBandMap.values().indexOf(workModeJson[jsonKey::sideBand].toString());
 
     emit updateView();
 }
